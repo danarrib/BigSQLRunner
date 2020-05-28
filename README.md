@@ -19,7 +19,8 @@ Main features:
 * Calculates remaining executing time (based on average execution speed)
 * Bypass errors and save the error lines into a separated file (same input file, but with ".error" extension).
 * Can resume the script execution from a specified line number
-* Recognizes "GO" statements. GO will make the chunck execute immediately and start a new chunck after.
+* Recognizes "GO" statements. GO will make the chunck execute immediately and start a new chunck after
+* It saves the last used connection string on the registry, so next time you open it, the connection string will be there
 * It's free and open-source
 
 Instructions:
