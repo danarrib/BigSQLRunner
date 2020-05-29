@@ -14,10 +14,10 @@ Also, Big SQL Runner runs the file in small chucks of 300 lines each (this numbe
 Main features:
 * Can open ANY SIZE of script file
 * Runs fast, low memory footprint
-* Break the script into smaller chuncks
+* Breaks the script into smaller chuncks
 * Tracks script execution progress
 * Calculates remaining executing time (based on average execution speed)
-* Bypass errors and save the error lines into a separated file (same input file, but with ".error" extension).
+* Bypasses errors and saves the error lines into a separated file (same input file, but with ".error" extension).
 * Can resume the script execution from a specified line number
 * Recognizes "GO" statements. GO will make the chunck execute immediately and start a new chunck after
 * It saves the last used connection string on the registry, so next time you open it, the connection string will be there
