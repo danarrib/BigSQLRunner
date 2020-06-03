@@ -31,7 +31,6 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtConnectionString = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.txtScriptFile = new System.Windows.Forms.TextBox();
             this.btnBrowseScriptFile = new System.Windows.Forms.Button();
             this.label3 = new System.Windows.Forms.Label();
             this.txtLinesPerBatch = new System.Windows.Forms.TextBox();
@@ -41,6 +40,8 @@
             this.pbScriptProgress = new System.Windows.Forms.ProgressBar();
             this.lblStatus = new System.Windows.Forms.Label();
             this.btnTestConnectionString = new System.Windows.Forms.Button();
+            this.lstFiles = new System.Windows.Forms.ListBox();
+            this.btnStop = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // label1
@@ -64,22 +65,15 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 84);
+            this.label2.Location = new System.Drawing.Point(12, 64);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(50, 13);
+            this.label2.Size = new System.Drawing.Size(55, 13);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Script file";
-            // 
-            // txtScriptFile
-            // 
-            this.txtScriptFile.Location = new System.Drawing.Point(109, 81);
-            this.txtScriptFile.Name = "txtScriptFile";
-            this.txtScriptFile.Size = new System.Drawing.Size(418, 20);
-            this.txtScriptFile.TabIndex = 3;
+            this.label2.Text = "Script files";
             // 
             // btnBrowseScriptFile
             // 
-            this.btnBrowseScriptFile.Location = new System.Drawing.Point(533, 79);
+            this.btnBrowseScriptFile.Location = new System.Drawing.Point(533, 59);
             this.btnBrowseScriptFile.Name = "btnBrowseScriptFile";
             this.btnBrowseScriptFile.Size = new System.Drawing.Size(85, 23);
             this.btnBrowseScriptFile.TabIndex = 4;
@@ -90,7 +84,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 129);
+            this.label3.Location = new System.Drawing.Point(12, 165);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(80, 13);
             this.label3.TabIndex = 5;
@@ -98,7 +92,7 @@
             // 
             // txtLinesPerBatch
             // 
-            this.txtLinesPerBatch.Location = new System.Drawing.Point(109, 126);
+            this.txtLinesPerBatch.Location = new System.Drawing.Point(109, 162);
             this.txtLinesPerBatch.Name = "txtLinesPerBatch";
             this.txtLinesPerBatch.Size = new System.Drawing.Size(100, 20);
             this.txtLinesPerBatch.TabIndex = 6;
@@ -107,7 +101,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(235, 129);
+            this.label4.Location = new System.Drawing.Point(12, 190);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(66, 13);
             this.label4.TabIndex = 7;
@@ -115,7 +109,7 @@
             // 
             // txtStartingLine
             // 
-            this.txtStartingLine.Location = new System.Drawing.Point(325, 126);
+            this.txtStartingLine.Location = new System.Drawing.Point(109, 187);
             this.txtStartingLine.Name = "txtStartingLine";
             this.txtStartingLine.Size = new System.Drawing.Size(100, 20);
             this.txtStartingLine.TabIndex = 8;
@@ -123,24 +117,24 @@
             // 
             // btnRunScript
             // 
-            this.btnRunScript.Location = new System.Drawing.Point(473, 124);
+            this.btnRunScript.Location = new System.Drawing.Point(382, 160);
             this.btnRunScript.Name = "btnRunScript";
             this.btnRunScript.Size = new System.Drawing.Size(145, 43);
             this.btnRunScript.TabIndex = 9;
-            this.btnRunScript.Text = "Run Script Now!";
+            this.btnRunScript.Text = "Run Script(s) Now!";
             this.btnRunScript.UseVisualStyleBackColor = true;
             this.btnRunScript.Click += new System.EventHandler(this.btnRunScript_Click);
             // 
             // pbScriptProgress
             // 
-            this.pbScriptProgress.Location = new System.Drawing.Point(15, 192);
+            this.pbScriptProgress.Location = new System.Drawing.Point(15, 213);
             this.pbScriptProgress.Name = "pbScriptProgress";
             this.pbScriptProgress.Size = new System.Drawing.Size(603, 23);
             this.pbScriptProgress.TabIndex = 10;
             // 
             // lblStatus
             // 
-            this.lblStatus.Location = new System.Drawing.Point(12, 228);
+            this.lblStatus.Location = new System.Drawing.Point(12, 239);
             this.lblStatus.Name = "lblStatus";
             this.lblStatus.Size = new System.Drawing.Size(606, 33);
             this.lblStatus.TabIndex = 11;
@@ -157,11 +151,32 @@
             this.btnTestConnectionString.UseVisualStyleBackColor = true;
             this.btnTestConnectionString.Click += new System.EventHandler(this.btnTestConnectionString_Click);
             // 
+            // lstFiles
+            // 
+            this.lstFiles.FormattingEnabled = true;
+            this.lstFiles.Location = new System.Drawing.Point(109, 59);
+            this.lstFiles.Name = "lstFiles";
+            this.lstFiles.Size = new System.Drawing.Size(418, 95);
+            this.lstFiles.TabIndex = 13;
+            // 
+            // btnStop
+            // 
+            this.btnStop.Enabled = false;
+            this.btnStop.Location = new System.Drawing.Point(533, 159);
+            this.btnStop.Name = "btnStop";
+            this.btnStop.Size = new System.Drawing.Size(85, 44);
+            this.btnStop.TabIndex = 14;
+            this.btnStop.Text = "Stop";
+            this.btnStop.UseVisualStyleBackColor = true;
+            this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
             // frmMainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(630, 275);
+            this.ClientSize = new System.Drawing.Size(630, 278);
+            this.Controls.Add(this.btnStop);
+            this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.btnTestConnectionString);
             this.Controls.Add(this.lblStatus);
             this.Controls.Add(this.pbScriptProgress);
@@ -171,7 +186,6 @@
             this.Controls.Add(this.txtLinesPerBatch);
             this.Controls.Add(this.label3);
             this.Controls.Add(this.btnBrowseScriptFile);
-            this.Controls.Add(this.txtScriptFile);
             this.Controls.Add(this.label2);
             this.Controls.Add(this.txtConnectionString);
             this.Controls.Add(this.label1);
@@ -192,7 +206,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TextBox txtConnectionString;
         private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.TextBox txtScriptFile;
         private System.Windows.Forms.Button btnBrowseScriptFile;
         private System.Windows.Forms.Label label3;
         private System.Windows.Forms.TextBox txtLinesPerBatch;
@@ -202,6 +215,8 @@
         private System.Windows.Forms.ProgressBar pbScriptProgress;
         private System.Windows.Forms.Label lblStatus;
         private System.Windows.Forms.Button btnTestConnectionString;
+        private System.Windows.Forms.ListBox lstFiles;
+        private System.Windows.Forms.Button btnStop;
     }
 }
 
