@@ -84,7 +84,7 @@ namespace BigSQLRunnerUI
                 return;
             }
 
-            if (lStartingLine <= 0)
+            if (lStartingLine < 0)
             {
                 MessageBox.Show("Invalid value on the starting line field! Value must be positive.", "Invalid value!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
@@ -295,14 +295,17 @@ namespace BigSQLRunnerUI
                 {
                     using (SqlCommand comm = new SqlCommand(sb.ToString(), conn))
                     {
+                        comm.CommandTimeout = 3600; // 1 hour
                         try
                         {
                             comm.ExecuteScalar();
                         }
                         catch (Exception ex)
                         {
+                            string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
                             // Save the chuncks that could not be processed
                             File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
+                            File.AppendAllText(errorFile, errormsg + Environment.NewLine);
                             qtyErrorLines++;
                         }
                         control = 0;
@@ -331,14 +334,17 @@ namespace BigSQLRunnerUI
             {
                 using (SqlCommand comm = new SqlCommand(sb.ToString(), conn))
                 {
+                    comm.CommandTimeout = 3600; // 1 hour
                     try
                     {
                         comm.ExecuteScalar();
                     }
-                    catch (Exception)
+                    catch (Exception ex)
                     {
+                        string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
                         // Save the chuncks that could not be processed
                         File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
+                        File.AppendAllText(errorFile, errormsg + Environment.NewLine);
                         qtyErrorLines++;
                     }
                     control = 0;
