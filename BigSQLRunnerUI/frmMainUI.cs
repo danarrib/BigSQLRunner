@@ -13,6 +13,7 @@ namespace BigSQLRunnerUI
     {
         private bool AllowToRun;
         private string CurrentFile;
+        private bool StopOnError;
         Stopwatch swTotalTime;
 
         public frmMainUI()
@@ -94,6 +95,7 @@ namespace BigSQLRunnerUI
             ControlScreen(false);
 
             AllowToRun = true;
+            StopOnError = chkStopOnError.Checked;
 
             foreach (var item in lstFiles.Items)
             {
@@ -225,6 +227,7 @@ namespace BigSQLRunnerUI
             lstFiles.Enabled = bEnable;
             txtLinesPerBatch.Enabled = bEnable;
             txtStartingLine.Enabled = bEnable;
+            chkStopOnError.Enabled = bEnable;
             btnStop.Enabled = !bEnable;
             Cursor.Current = bEnable ? Cursors.Default : Cursors.WaitCursor;
             this.UseWaitCursor = !bEnable;
@@ -307,6 +310,8 @@ namespace BigSQLRunnerUI
                             File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
                             File.AppendAllText(errorFile, errormsg + Environment.NewLine);
                             qtyErrorLines++;
+                            if (StopOnError)
+                                AllowToRun = false;
                         }
                         control = 0;
                         sb.Clear();
@@ -346,6 +351,8 @@ namespace BigSQLRunnerUI
                         File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
                         File.AppendAllText(errorFile, errormsg + Environment.NewLine);
                         qtyErrorLines++;
+                        if (StopOnError)
+                            AllowToRun = false;
                     }
                     control = 0;
                     sb.Clear();

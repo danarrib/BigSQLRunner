@@ -42,6 +42,7 @@
             this.btnTestConnectionString = new System.Windows.Forms.Button();
             this.lstFiles = new System.Windows.Forms.ListBox();
             this.btnStop = new System.Windows.Forms.Button();
+            this.chkStopOnError = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -170,11 +171,22 @@
             this.btnStop.UseVisualStyleBackColor = true;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
+            // chkStopOnError
+            // 
+            this.chkStopOnError.AutoSize = true;
+            this.chkStopOnError.Location = new System.Drawing.Point(243, 164);
+            this.chkStopOnError.Name = "chkStopOnError";
+            this.chkStopOnError.Size = new System.Drawing.Size(87, 17);
+            this.chkStopOnError.TabIndex = 15;
+            this.chkStopOnError.Text = "Stop on error";
+            this.chkStopOnError.UseVisualStyleBackColor = true;
+            // 
             // frmMainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(630, 278);
+            this.Controls.Add(this.chkStopOnError);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.lstFiles);
             this.Controls.Add(this.btnTestConnectionString);
@@ -217,6 +229,7 @@
         private System.Windows.Forms.Button btnTestConnectionString;
         private System.Windows.Forms.ListBox lstFiles;
         private System.Windows.Forms.Button btnStop;
+        private System.Windows.Forms.CheckBox chkStopOnError;
     }
 }
 
