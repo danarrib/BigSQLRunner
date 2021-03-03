@@ -43,6 +43,7 @@
             this.lstFiles = new System.Windows.Forms.ListBox();
             this.btnStop = new System.Windows.Forms.Button();
             this.chkStopOnError = new System.Windows.Forms.CheckBox();
+            this.chkLogErrors = new System.Windows.Forms.CheckBox();
             this.SuspendLayout();
             // 
             // label1
@@ -181,11 +182,24 @@
             this.chkStopOnError.Text = "Stop on error";
             this.chkStopOnError.UseVisualStyleBackColor = true;
             // 
+            // chkLogErrors
+            // 
+            this.chkLogErrors.AutoSize = true;
+            this.chkLogErrors.Checked = true;
+            this.chkLogErrors.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkLogErrors.Location = new System.Drawing.Point(243, 186);
+            this.chkLogErrors.Name = "chkLogErrors";
+            this.chkLogErrors.Size = new System.Drawing.Size(73, 17);
+            this.chkLogErrors.TabIndex = 16;
+            this.chkLogErrors.Text = "Log errors";
+            this.chkLogErrors.UseVisualStyleBackColor = true;
+            // 
             // frmMainUI
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(630, 278);
+            this.Controls.Add(this.chkLogErrors);
             this.Controls.Add(this.chkStopOnError);
             this.Controls.Add(this.btnStop);
             this.Controls.Add(this.lstFiles);
@@ -230,6 +244,7 @@
         private System.Windows.Forms.ListBox lstFiles;
         private System.Windows.Forms.Button btnStop;
         private System.Windows.Forms.CheckBox chkStopOnError;
+        private System.Windows.Forms.CheckBox chkLogErrors;
     }
 }
 

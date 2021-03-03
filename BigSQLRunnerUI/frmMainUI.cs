@@ -14,6 +14,8 @@ namespace BigSQLRunnerUI
         private bool AllowToRun;
         private string CurrentFile;
         private bool StopOnError;
+        private bool LogErrors;
+
         Stopwatch swTotalTime;
 
         public frmMainUI()
@@ -96,6 +98,7 @@ namespace BigSQLRunnerUI
 
             AllowToRun = true;
             StopOnError = chkStopOnError.Checked;
+            LogErrors = chkLogErrors.Checked;
 
             foreach (var item in lstFiles.Items)
             {
@@ -119,7 +122,7 @@ namespace BigSQLRunnerUI
                     break;
 
             }
-            
+
             ControlScreen(true);
             System.Media.SystemSounds.Beep.Play();
         }
@@ -305,10 +308,13 @@ namespace BigSQLRunnerUI
                         }
                         catch (Exception ex)
                         {
-                            string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
-                            // Save the chuncks that could not be processed
-                            File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
-                            File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                            if (LogErrors)
+                            {
+                                string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
+                                // Save the chuncks that could not be processed
+                                File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
+                                File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                            }
                             qtyErrorLines++;
                             if (StopOnError)
                                 AllowToRun = false;
@@ -346,10 +352,13 @@ namespace BigSQLRunnerUI
                     }
                     catch (Exception ex)
                     {
-                        string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
-                        // Save the chuncks that could not be processed
-                        File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
-                        File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                        if (LogErrors)
+                        {
+                            string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
+                            // Save the chuncks that could not be processed
+                            File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
+                            File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                        }
                         qtyErrorLines++;
                         if (StopOnError)
                             AllowToRun = false;
