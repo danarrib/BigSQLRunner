@@ -60,24 +60,24 @@ namespace BigSQLRunnerUI
             if (!TestConnectionString(strConnectionString))
                 return;
 
-            short sLinesPerBatch = 0;
+            long sLinesPerBatch = 0;
             long lStartingLine = 0;
 
-            if (!short.TryParse(strLinesPerBatch, out sLinesPerBatch))
+            if (!long.TryParse(strLinesPerBatch, out sLinesPerBatch))
             {
                 MessageBox.Show("Invalid value on the lines per batch field!", "Invalid value!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (sLinesPerBatch <= 0)
+            if (sLinesPerBatch < 0)
             {
                 MessageBox.Show("Invalid value on the lines per batch field! Value must be positive!", "Invalid value!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
-            if (sLinesPerBatch > 5000)
+            if (sLinesPerBatch > 500000)
             {
-                MessageBox.Show("Invalid value on the lines per batch field! Value is limited to 5000.", "Invalid value!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                MessageBox.Show("Invalid value on the lines per batch field! Value is limited to 500000.", "Invalid value!", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
@@ -232,6 +232,7 @@ namespace BigSQLRunnerUI
             txtStartingLine.Enabled = bEnable;
             chkStopOnError.Enabled = bEnable;
             btnStop.Enabled = !bEnable;
+            chkLogErrors.Enabled = bEnable;
             Cursor.Current = bEnable ? Cursors.Default : Cursors.WaitCursor;
             this.UseWaitCursor = !bEnable;
         }
@@ -254,17 +255,17 @@ namespace BigSQLRunnerUI
             }
         }
 
-        private bool RunScript(string sourceScript, string connectionString, short qtyMaxLines, long startLine)
+        private bool RunScript(string sourceScript, string connectionString, long qtyMaxLines, long startLine)
         {
             SqlConnection conn = new SqlConnection(connectionString);
             conn.Open();
 
             // Config
             string line;
-            string errorFile = sourceScript + ".error";
+            string errorFile = sourceScript + ".[linenumber].error";
             long qtyErrorLines = 0;
             long qtyLines = 0;
-            short control = 0;
+            long control = 0;
             Stopwatch watchtotal = Stopwatch.StartNew();
 
             long totalLines = CountLines(sourceScript);
@@ -297,31 +298,35 @@ namespace BigSQLRunnerUI
                     sb.AppendLine(line);
                 }
 
-                if (control >= qtyMaxLines || isGO)
+                if ((control >= qtyMaxLines && qtyMaxLines > 0) || isGO)
                 {
-                    using (SqlCommand comm = new SqlCommand(sb.ToString(), conn))
+                    if (sb.Length > 0)
                     {
-                        comm.CommandTimeout = 3600; // 1 hour
-                        try
+                        using (SqlCommand comm = new SqlCommand(sb.ToString(), conn))
                         {
-                            comm.ExecuteScalar();
-                        }
-                        catch (Exception ex)
-                        {
-                            if (LogErrors)
+                            comm.CommandTimeout = 3600; // 1 hour
+                            try
                             {
-                                string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
-                                // Save the chuncks that could not be processed
-                                File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
-                                File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                                comm.ExecuteScalar();
                             }
-                            qtyErrorLines++;
-                            if (StopOnError)
-                                AllowToRun = false;
+                            catch (Exception ex)
+                            {
+                                if (LogErrors)
+                                {
+                                    string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
+                                    // Save the chuncks that could not be processed
+                                    File.AppendAllText(errorFile.Replace("[linenumber]", qtyLines.ToString()), sb.ToString() + Environment.NewLine);
+                                    File.AppendAllText(errorFile.Replace("[linenumber]", qtyLines.ToString()), errormsg + Environment.NewLine);
+                                }
+                                qtyErrorLines++;
+                                if (StopOnError)
+                                    AllowToRun = false;
+                            }
+                            control = 0;
+                            sb.Clear();
                         }
-                        control = 0;
-                        sb.Clear();
                     }
+
                     // Update screen
                     double percentComplete = (qtyLines.ToDouble() / totalLines.ToDouble()) * 100.0;
                     long ticksLeft = Convert.ToInt64((totalLines.ToDouble() - qtyLines.ToDouble()) * (watch.ElapsedTicks / qtyLines.ToDouble()));
@@ -341,7 +346,7 @@ namespace BigSQLRunnerUI
             }
 
             // Finished reading file. Check if there's still lines to run
-            if (control > 0 && AllowToRun)
+            if (control > 0 && AllowToRun && sb.Length > 0)
             {
                 using (SqlCommand comm = new SqlCommand(sb.ToString(), conn))
                 {
@@ -356,8 +361,8 @@ namespace BigSQLRunnerUI
                         {
                             string errormsg = "/* The error was: \n" + ex.Message + "\n*/";
                             // Save the chuncks that could not be processed
-                            File.AppendAllText(errorFile, sb.ToString() + Environment.NewLine);
-                            File.AppendAllText(errorFile, errormsg + Environment.NewLine);
+                            File.AppendAllText(errorFile.Replace("[linenumber]", qtyLines.ToString()), sb.ToString() + Environment.NewLine);
+                            File.AppendAllText(errorFile.Replace("[linenumber]", qtyLines.ToString()), errormsg + Environment.NewLine);
                         }
                         qtyErrorLines++;
                         if (StopOnError)
@@ -377,7 +382,7 @@ namespace BigSQLRunnerUI
 
             if (qtyErrorLines > 0 && AllowToRun)
             {
-                string errorMessage = string.Format("{0} lines were not loaded. Please check the error file {1}", qtyErrorLines, errorFile);
+                string errorMessage = string.Format("{0} lines were not loaded. Please check the error files {1}", qtyErrorLines, errorFile);
                 MessageBox.Show(errorMessage, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
 
@@ -408,6 +413,7 @@ namespace BigSQLRunnerUI
                     }
                 }
             }
+
             return lineCount;
         }
 
